@@ -83,6 +83,10 @@ public class LinkedListQueue<E> implements Queue<E> {
         return delNode.e;
     }
 
+    /**
+     * 返回队列头部
+     * @return
+     */
     @Override
     public E getFront() {
         if(isEmpty())
