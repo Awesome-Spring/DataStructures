@@ -1,8 +1,6 @@
 package com.jt666.tree;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 public class BinarySearchTree<E extends Comparable<E>> {
 
@@ -26,7 +24,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
         size = 0;
     }
 
-    public int size() {
+    public int getSize() {
         return size;
     }
 
@@ -197,6 +195,151 @@ public class BinarySearchTree<E extends Comparable<E>> {
             if (node.right != null)
                 queue.offer(node.right);
         }
+    }
+
+    // 寻找二分搜索树的最小元素
+    public E minElement() {
+        if (size == 0) {
+            throw new RuntimeException("the node is empty");
+        }
+        return minElement(root).e;
+    }
+
+    // 返回以node为根的二分搜索树的最小值所在的节点
+    private Node minElement(Node node) {
+
+        if (node.left == null) {
+            return node;
+        }
+        return minElement(node.left);
+
+    }
+
+    // 寻找二分搜索树的最大元素
+    public E maxElement() {
+        if (size == 0) {
+            throw new RuntimeException("the node is empty");
+        }
+        return maxElement(root).e;
+    }
+
+    // 返回以node为根的二分搜索树的最大值所在的节点
+    private Node maxElement(Node node) {
+
+        if (node.right == null) {
+            return node;
+        }
+        return maxElement(node.right);
+
+    }
+
+    // 从二分搜索树中删除最小值所在节点, 返回最小值
+    public E removeMinElement() {
+        E ret = minElement();
+        root = removeMin(root);
+        return ret;
+    }
+
+    // 删除掉以node为根的二分搜索树中的最小节点
+    // 返回删除节点后新的二分搜索树的根
+    private Node removeMin(Node node) {
+
+        //递归终止条件(向左走走不动，即左子树为空)
+        if (node.left == null) {
+            //如果有右子树，将这个右子树返回，成为根节点
+            Node rightNode = node.right;
+            node.right = null;
+            size--;
+            return rightNode;
+        }
+
+        node.left = removeMin(node.left);
+        return node;
+
+    }
+
+    // 从二分搜索树中删除最大值所在节点, 返回最大值
+    public E removeMaxElement() {
+        E ret = maxElement();
+        root = removeMax(root);
+        return ret;
+    }
+
+    // 删除掉以node为根的二分搜索树中的最大节点
+    // 返回删除节点后新的二分搜索树的根
+    private Node removeMax(Node node) {
+
+        //递归终止条件(向右走走不动，即右子树为空)
+        if (node.right == null) {
+            //如果有左子树，将这个左子树返回，成为根节点
+            Node leftNode = node.left;
+            node.left = null;
+            size--;
+            return leftNode;
+        }
+
+        node.right = removeMax(node.right);
+        return node;
+
+    }
+
+    //从二分搜索树中删除指定值
+    public void removeElement(E e) {
+        if (!contains(e)) {
+            throw new IllegalArgumentException("IllegalArgument!");
+        }
+        root = removeElement(root, e);
+    }
+
+    // 删除掉以node为根的二分搜索树中的指定值
+    // 返回删除节点后新的二分搜索树的根
+    private Node removeElement(Node node, E e) {
+
+        if (node == null) {
+            return null;
+        }
+
+        //如果要删除元素小于当前节点元素，则去左子树中递归删除
+        if (e.compareTo(node.e) < 0) {  //如果要删除元素大于当前节点元素，则去右子树中递归删除
+            node.left = removeElement(node.left, e);
+            return node;
+        } else if (e.compareTo(node.e) > 0) {
+            node.right = removeElement(node.right, e);
+            return node;
+        } else { //要删除元素就是当前节点元素
+
+            if (node.left == null) { //要删除的节点上有右子树，将这个右子树返回成为新节点
+                Node rightNode = node.right;
+                node.right = null;
+                size--;
+                return rightNode;
+            }
+
+            if (node.right == null) { //要删除的节点上有左子树，将这个左子树返回成为新节点
+                Node leftNode = node.left;
+                node.left = null;
+                size--;
+                return leftNode;
+            }
+
+            //左右子树都不为空的情况  找到该节点的后继节点 即该节点右子树的最小节点
+            Node successor = minElement(node.right);
+            //将该节点顶替为要删除的节点
+            successor.right = removeMin(node.right);
+            successor.left = node.left;
+            node.right = node.left = null;//删除该节点
+            return successor;
+
+//
+//            //左右子树都不为空的情况  找到该节点的前续节点 即该节点左子树的最大节点
+//            Node Preceding  = maxElement(node.left);
+//            //将该节点顶替为要删除的节点
+//            Preceding .left =removeMax(node.left);
+//            Preceding .right = node.right;
+//            node.right = node.left = null;//删除该节点
+//            return Preceding ;
+
+        }
 
     }
 
@@ -206,17 +349,12 @@ public class BinarySearchTree<E extends Comparable<E>> {
         for (int i : arr) {
             bst.add(i);
         }
-        System.out.print("前序遍历");
-        bst.preOrder();
-        System.out.println();
-        System.out.print("中序遍历");
-        bst.inOrder();
-        System.out.println();
-        System.out.print("后序遍历");
-        bst.postOrder();
-        System.out.println();
-        System.out.print("层序遍历");
-        bst.levelOrder();
 
+        System.out.println(bst);
+        bst.removeElement(3);
+        bst.levelOrder();
+        System.out.println();
+        System.out.println(bst.getSize());
     }
 }
+
