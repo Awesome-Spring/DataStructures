@@ -1,4 +1,4 @@
-package com.heap;
+package com.jt666.heap;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package com.heap;
+package com.jt666.heap;
 
 public class MaxHeap<E extends Comparable<E>> {
     private Array<E> data; //底层用动态数组实现

@@ -1,6 +1,6 @@
 package com.jt666.queue.priorityqueue;
 
-import com.heap.Array;
+import com.jt666.heap.Array;
 
 public class MaxHeap<E extends Comparable<E>> {
     private Array<E> data; //底层用动态数组实现
