@@ -71,14 +71,6 @@ public class Array<E> {
         return data[index];
     }
 
-    public E getLast() {
-        return get(size-1);
-    }
-
-    public E getFirst() {
-        return get(0);
-    }
-
     // 修改index索引位置的元素为e
     public void set(int index, E e) {
         if (index < 0 || index >= size)
@@ -104,30 +96,28 @@ public class Array<E> {
         }
         return -1;
     }
-    // 从数组中删除index位置的元素, 返回删除的元素
-    public E remove(int index){
-        if(index < 0 || index >= size)
-            throw new IllegalArgumentException("Remove failed. Index is illegal.");
 
-        E ret = data[index];
-        for(int i = index + 1 ; i < size ; i ++)
-            data[i - 1] = data[i];
-        size --;
-        data[size] = null; // loitering objects != memory leak
-
-        if(size == data.length / 2)
+    public E remove(int index) {
+        if (index < 0 || index > size)
+            throw new IllegalArgumentException("Add failed. Require index >= 0 and index <= size.");
+        E res = data[index];
+        for (int i = index+1; i < size; i++) {
+            data[i-1] = data[i];
+        }
+        size--;
+        data[size] = null;
+        if (size == data.length / 4 &&data.length/2 != 0){
             resize(data.length / 2);
-        return ret;
+        }
+        return res;
     }
 
-    // 从数组中删除第一个元素, 返回删除的元素
-    public E removeFirst(){
-        return remove(0);
-    }
-
-    // 从数组中删除最后一个元素, 返回删除的元素
-    public E removeLast(){
+    public E removeLast() {
         return remove(size - 1);
+    }
+
+    public E removeFirst() {
+        return remove(0);
     }
 
     public void removeElement(E e) {
