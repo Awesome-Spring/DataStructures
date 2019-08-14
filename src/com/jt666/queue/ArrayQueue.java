@@ -33,7 +33,7 @@ public class ArrayQueue<E> implements  Queue<E> {
 
     @Override
     public E getFront() {
-        return array.getFirst();
+        return array.get(0);
     }
 
     @Override
