@@ -1,4 +1,4 @@
-package com.jt666.sortingalgorithm;
+package com.jt666.agalgorithm;
 
 import java.util.Arrays;
 import java.util.Random;
